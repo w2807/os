@@ -113,7 +113,8 @@ int main(void)
         }
         else if (pid > 0)
         {
-            wait(NULL);
+            if (flag == 1)
+                wait(NULL);
         }
     }
     return 0;
