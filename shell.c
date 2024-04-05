@@ -102,6 +102,11 @@ int main(void)
                 if (args[0][1] == '!' && count > 0)
                 {
                     char **tempargs = split(history[count > 10 ? MAX_HISTORY - 2 : count - 2].com, &tempIndex);
+                    if (strcmp(tempargs[tempIndex - 1], "&") == 0)
+                    {
+                        flag = 1;
+                        tempargs[tempIndex - 1] = NULL;
+                    }
                     execvp(tempargs[0], tempargs);
                 }
                 else if (args[0][1] == '!' && count == 1)
@@ -113,6 +118,11 @@ int main(void)
                     else
                     {
                         char **tempargs = split(history[count > 10 ? (num - count % 10 - 1) : (num - 1)].com, &tempIndex);
+                        if (strcmp(tempargs[tempIndex - 1], "&") == 0)
+                        {
+                            flag = 1;
+                            tempargs[tempIndex - 1] = NULL;
+                        }
                         execvp(tempargs[0], tempargs);
                     }
                 }
