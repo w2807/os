@@ -4,6 +4,7 @@
 #include <sys/types.h>
 #include <wait.h>
 #include <stdlib.h>
+#include <signal.h>
 
 #define MAX_LINE 80
 #define MAX_HISTORY 10
@@ -31,15 +32,24 @@ char **split(char *buffer, int *index)
     return args;
 }
 
+void child_handler(int sig)
+{
+    int status;
+    printf("osh>");
+    fflush(stdout);
+}
+
 int main(void)
 {
+    signal(SIGCHLD, child_handler);
     int should_run = 1;
     command history[MAX_HISTORY];
     memset(history, 0, sizeof(history));
     int count = 0;
     while (should_run)
     {
-        printf("osh>");
+        if (count == 0)
+            printf("osh>");
         fflush(stdout);
         char buffer[MAX_LINE];
         int index;
@@ -113,7 +123,7 @@ int main(void)
         }
         else if (pid > 0)
         {
-            if (flag == 1)
+            if (flag == 0)
                 wait(NULL);
         }
     }
